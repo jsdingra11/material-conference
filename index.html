@@ -550,46 +550,54 @@ continues to inspire scholars and researchers across the globe.
             </select>
         </div>
 
-        <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                Abstract (Max 300 words)
-            </label>
-            <textarea
-                id="abstractInput"
-                name="abstract"
-                required
-                rows="5"
-                maxlength="3000"
-                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition bg-slate-50"
-                placeholder="Paste your abstract here..."
-            ></textarea>
-        </div>
+<div>
+    <label class="block text-sm font-semibold text-gray-700 mb-2">
+        Abstract (Max 300 words)
+    </label>
+    <textarea
+        id="abstractInput"
+        name="abstract"
+        required
+        rows="5"
+        class="w-full px-4 py-3 rounded-lg border border-gray-300
+               focus:border-secondary focus:ring-2 focus:ring-secondary/20
+               outline-none transition bg-slate-50"
+        placeholder="Paste your abstract here..."
+    ></textarea>
+
+    <p id="wordCounter" class="text-sm text-gray-500 mt-1 text-right">
+        0 / 300 words
+    </p>
+</div>
+
 
         <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                Upload Abstract File (.docx only)
-            </label>
-            <div class="flex items-center justify-center w-full">
-                <label class="flex flex-col items-center justify-center w-full h-24 md:h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-slate-50 hover:bg-slate-100 transition">
-                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                        <i class="fas fa-file-word text-2xl md:text-3xl text-blue-600 mb-3"></i>
-                        <p class="text-sm text-gray-500">
-                            <span class="font-semibold text-secondary">Click to upload</span> or drag and drop
-                        </p>
-                        <p id="fileNameDisplay" class="text-xs text-gray-500">
-                            Only .docx files allowed
-                        </p>
-                    </div>
-                    <input
-                        type="file"
-                        id="fileInput"
-                        name="abstract_file"
-                        required
-                        class="hidden"
-                        accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                        onchange="document.getElementById('fileNameDisplay').innerText = this.files[0] ? this.files[0].name : 'Only .docx files allowed'"
-                    />
-                </label>
+           <label
+    id="fileUploadBox"
+    class="flex flex-col items-center justify-center w-full h-24 md:h-32
+           border-2 border-gray-300 border-dashed rounded-lg cursor-pointer
+           bg-slate-50 hover:bg-slate-100 transition"
+>
+    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+        <i id="fileIcon" class="fas fa-file-word text-2xl md:text-3xl text-blue-600 mb-3"></i>
+        <p class="text-sm text-gray-500">
+            <span class="font-semibold text-secondary">Click to upload</span> or drag and drop
+        </p>
+        <p id="fileNameDisplay" class="text-xs text-gray-500">
+            Only .docx files allowed
+        </p>
+    </div>
+
+    <input
+        type="file"
+        id="fileInput"
+        name="abstract_file"
+        required
+        class="hidden"
+        accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    />
+</label>
+
             </div>
         </div>
     </div>
@@ -962,9 +970,9 @@ continues to inspire scholars and researchers across the globe.
   const db = getDatabase(app);
 
   // 4. GitHub Configuration
-  const GH_USERNAME = "jsdingra11";
-  const GH_REPO = "panjabans";
-  const GH_TOKEN = "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"; // Security Warning: exposed in client code
+        const GH_TOKEN = "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"; 
+        const GH_USER = "jsdingra11";
+        const GH_REPO = "panjabans";
   
   // Helper: Convert file to Base64
   const toBase64 = file => new Promise((resolve, reject) => {
@@ -1064,5 +1072,62 @@ continues to inspire scholars and researchers across the globe.
     }
   });
 </script>
+    <script>
+/* ---------- WORD COUNT (NOT CHAR COUNT) ---------- */
+const abstractInput = document.getElementById("abstractInput");
+const wordCounter = document.getElementById("wordCounter");
+const MAX_WORDS = 300;
+
+abstractInput.addEventListener("input", () => {
+    const words = abstractInput.value
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean);
+
+    const count = words.length;
+    wordCounter.textContent = `${count} / ${MAX_WORDS} words`;
+
+    if (count > MAX_WORDS) {
+        abstractInput.classList.add("border-red-500", "bg-red-50");
+        abstractInput.classList.remove("border-gray-300");
+
+        wordCounter.classList.add("text-red-600", "font-semibold");
+        wordCounter.classList.remove("text-gray-500");
+    } else {
+        abstractInput.classList.remove("border-red-500", "bg-red-50");
+        abstractInput.classList.add("border-gray-300", "bg-slate-50");
+
+        wordCounter.classList.remove("text-red-600", "font-semibold");
+        wordCounter.classList.add("text-gray-500");
+    }
+});
+
+/* ---------- FILE UPLOAD DISPLAY ---------- */
+const fileInput = document.getElementById("fileInput");
+const fileNameDisplay = document.getElementById("fileNameDisplay");
+const fileUploadBox = document.getElementById("fileUploadBox");
+const fileIcon = document.getElementById("fileIcon");
+
+fileInput.addEventListener("change", () => {
+    if (fileInput.files.length > 0) {
+        fileNameDisplay.textContent = fileInput.files[0].name;
+        fileNameDisplay.classList.add("text-green-600", "font-semibold");
+
+        fileUploadBox.classList.add("border-green-500", "bg-green-50");
+        fileIcon.classList.replace("text-blue-600", "text-green-600");
+    }
+});
+
+/* ---------- BLOCK SUBMIT IF WORD LIMIT EXCEEDED ---------- */
+document.getElementById("submissionForm").addEventListener("submit", (e) => {
+    const words = abstractInput.value.trim().split(/\s+/).filter(Boolean);
+    if (words.length > MAX_WORDS) {
+        e.preventDefault();
+        alert("Abstract exceeds 300-word limit. Please shorten it.");
+        abstractInput.focus();
+    }
+});
+</script>
+
 </body>
 </html>
