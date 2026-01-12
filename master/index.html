@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | IC-EMTSD-2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e3a8a',
+                        secondary: '#3b82f6',
+                        success: '#10b981',
+                        danger: '#ef4444',
+                        warning: '#f59e0b'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .login-bg {
+            background-image: linear-gradient(rgba(30, 58, 138, 0.95), rgba(23, 37, 84, 0.9)), url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGYw1rWJqyjVLzGctWiub4rYpb3rHnj4uMGQ&s');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div id="loginSection" class="fixed inset-0 z-50 flex items-center justify-center login-bg">
+        <div class="bg-white p-10 rounded-2xl shadow-2xl max-w-md w-full mx-4 border border-slate-200">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-blue-100">
+                    <i class="fas fa-shield-alt text-3xl text-primary"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800 tracking-tight">Admin Portal</h2>
+                <p class="text-gray-500 mt-2 text-sm">IC-EMTSD-2026 Database</p>
+            </div>
+            
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2 tracking-wider">Access Key</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4">
+                            <i class="fas fa-lock text-gray-400"></i>
+                        </span>
+                        <input type="password" id="passwordInput" class="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition bg-slate-50" placeholder="Enter password">
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-primary text-white font-bold py-3.5 rounded-xl hover:bg-blue-900 transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                    Login to Dashboard
+                </button>
+            </form>
+            <div class="mt-6 text-center">
+                <a href="index.html" class="text-sm text-gray-400 hover:text-primary transition font-medium">← Back to Website</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboardSection" class="hidden min-h-screen flex flex-col">
+        
+        <nav class="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm backdrop-blur-md bg-opacity-90">
+            <div class="container mx-auto px-4 md:px-6 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="h-10 w-10 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white font-bold shadow-md">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800 leading-none">Submissions</h1>
+                        <span class="text-xs text-gray-500 font-medium">Manage Abstracts</span>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-3">
+                    <button onclick="copyAllEmails()" class="bg-indigo-50 text-indigo-600 px-4 py-2 rounded-lg font-bold text-sm hover:bg-indigo-100 transition border border-indigo-200 flex items-center gap-2">
+                        <i class="fas fa-copy"></i> Copy Accepted Emails
+                    </button>
+                    
+                    <div class="bg-gray-100 px-4 py-2 rounded-lg text-sm font-bold text-gray-600 border border-gray-200">
+                        Total: <span id="totalCount" class="text-primary">0</span>
+                    </div>
+
+                    <button onclick="logout()" class="text-gray-400 hover:text-red-500 transition p-2 rounded-full hover:bg-red-50" title="Logout">
+                        <i class="fas fa-power-off text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <main class="flex-grow container mx-auto px-4 md:px-6 py-8">
+            
+            <div id="loader" class="flex flex-col items-center justify-center py-20">
+                <i class="fas fa-circle-notch fa-spin text-4xl text-secondary mb-4"></i>
+                <p class="text-gray-500 font-medium animate-pulse">Syncing Database...</p>
+            </div>
+
+            <div id="emptyState" class="hidden flex flex-col items-center justify-center py-20 text-center">
+                <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-inbox text-3xl text-gray-400"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-600">No Data</h3>
+                <p class="text-gray-400 text-sm">No abstracts have been submitted yet.</p>
+            </div>
+
+            <div id="cardGrid" class="hidden grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+            </div>
+        </main>
+    </div>
+
+    <div id="previewModal" class="fixed inset-0 z-[60] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity backdrop-blur-sm" onclick="closePreview()"></div>
+
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl h-[85vh] flex flex-col">
+                    
+                    <div class="bg-gray-50 px-4 py-3 flex justify-between items-center border-b border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                            <i class="fas fa-eye text-primary"></i> Document Preview
+                        </h3>
+                        <div class="flex items-center gap-2">
+                            <a id="downloadBtn" href="#" target="_blank" class="text-sm bg-primary text-white px-3 py-1.5 rounded hover:bg-blue-900 transition">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                            <button type="button" onclick="closePreview()" class="text-gray-400 hover:text-red-500 transition">
+                                <i class="fas fa-times text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex-grow bg-gray-200 relative">
+                        <div id="previewLoader" class="absolute inset-0 flex items-center justify-center">
+                            <i class="fas fa-spinner fa-spin text-3xl text-gray-400"></i>
+                        </div>
+                        <iframe id="docFrame" class="w-full h-full" frameborder="0"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, get, child, update, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // 1. Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyB4eoofAdY4DrW-VKvfGJl5aNv2hoCTn4c",
+            authDomain: "iist-fd6e8.firebaseapp.com",
+            databaseURL: "https://iist-fd6e8-default-rtdb.firebaseio.com",
+            projectId: "iist-fd6e8",
+            storageBucket: "iist-fd6e8.firebasestorage.app",
+            messagingSenderId: "692699808449",
+            appId: "1:692699808449:web:120c8941a940d071f24a40",
+            measurementId: "G-GPFG8LWF2H"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        let acceptedEmailsList = [];
+
+        // 2. Auth Logic
+        const loginForm = document.getElementById('loginForm');
+        const loginSection = document.getElementById('loginSection');
+        const dashboardSection = document.getElementById('dashboardSection');
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const password = document.getElementById('passwordInput').value;
+            if (password === "gndu26") {
+                loginSection.classList.add('hidden');
+                dashboardSection.classList.remove('hidden');
+                fetchData();
+            } else {
+                showToast("Access Denied: Incorrect Password", "error");
+                document.getElementById('passwordInput').value = '';
+            }
+        });
+
+        window.logout = function() {
+            if(confirm("Logout from admin panel?")) location.reload();
+        }
+
+        // 3. Fetch Data
+        async function fetchData() {
+            const loader = document.getElementById('loader');
+            const grid = document.getElementById('cardGrid');
+            const empty = document.getElementById('emptyState');
+            const totalCount = document.getElementById('totalCount');
+
+            try {
+                const dbRef = ref(db);
+                const snapshot = await get(child(dbRef, `registrations`));
+
+                loader.classList.add('hidden');
+                acceptedEmailsList = []; 
+
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    const entries = Object.entries(data);
+                    
+                    totalCount.innerText = entries.length;
+                    grid.classList.remove('hidden');
+                    grid.innerHTML = ""; 
+                    
+                    entries.reverse().forEach(([key, val]) => {
+                        if(val.status === 'accepted') {
+                            acceptedEmailsList.push(val.email);
+                        }
+                        const card = createCardHTML(key, val);
+                        grid.innerHTML += card;
+                    });
+
+                } else {
+                    empty.classList.remove('hidden');
+                    totalCount.innerText = "0";
+                }
+
+            } catch (error) {
+                loader.classList.add('hidden');
+                showToast("Database Connection Failed", "error");
+                console.error(error);
+            }
+        }
+
+        // 4. Card Template
+        function createCardHTML(id, data) {
+            let statusBadge = '';
+            let cardBorder = 'border-slate-200';
+            let status = data.status || 'pending'; 
+
+            if (status === 'accepted') {
+                statusBadge = `<span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded border border-green-200 flex items-center gap-1"><i class="fas fa-check-circle"></i> Accepted</span>`;
+                cardBorder = 'border-green-300 ring-1 ring-green-100';
+            } else if (status === 'rejected') {
+                statusBadge = `<span class="bg-red-100 text-red-700 text-xs font-bold px-2 py-1 rounded border border-red-200 flex items-center gap-1"><i class="fas fa-times-circle"></i> Rejected</span>`;
+                cardBorder = 'border-red-200 bg-red-50/30';
+            } else {
+                statusBadge = `<span class="bg-yellow-100 text-yellow-700 text-xs font-bold px-2 py-1 rounded border border-yellow-200 flex items-center gap-1"><i class="fas fa-clock"></i> Pending</span>`;
+            }
+
+            // MODIFIED: Preview Button Logic
+            const hasFile = data.fileDownloadUrl && data.fileDownloadUrl !== "No file uploaded";
+            const fileButton = hasFile 
+                ? `<button onclick="openPreview('${data.fileDownloadUrl}')" class="text-blue-600 hover:text-blue-800 text-xs font-bold hover:underline flex items-center gap-1"><i class="fas fa-eye"></i> Preview Doc</button>`
+                : `<span class="text-gray-400 text-xs cursor-not-allowed"><i class="fas fa-times"></i> No Doc</span>`;
+
+            let mailButton = '';
+            if (status === 'accepted') {
+                const subject = encodeURIComponent("Abstract Acceptance Notification - IC-EMTSD-2026");
+                const body = encodeURIComponent(
+`Dear ${data.fullName},
+
+I am pleased to inform you that your abstract titled "${data.paperTitle}" has been accepted for presentation at the International Conference on Emerging Materials and Technologies for Sustainable Development (IC-EMTSD-2026).
+
+Conference Details:
+• Date: February 26-27, 2026
+• Venue: Guru Nanak Dev University, Amritsar
+
+We look forward to your valuable contribution to the conference.
+
+Warm regards,
+
+Prof. (Dr.) Aman Mahajan
+Convenor, IC-EMTSD-2026
+Head, Department of Physics
+Guru Nanak Dev University, Amritsar`
+                );
+                
+                mailButton = `
+                <a href="mailto:${data.email}?subject=${subject}&body=${body}" target="_blank" class="flex-1 bg-green-600 text-white py-2 rounded-lg font-bold text-sm hover:bg-green-700 transition flex items-center justify-center gap-2 shadow-sm">
+                    <i class="fas fa-envelope"></i> Send Mail
+                </a>`;
+            } else {
+                 mailButton = `
+                <button disabled class="flex-1 bg-gray-100 text-gray-400 py-2 rounded-lg font-bold text-sm cursor-not-allowed flex items-center justify-center gap-2">
+                    <i class="fas fa-envelope"></i> Send Mail
+                </button>`;
+            }
+
+            return `
+            <div class="bg-white rounded-xl shadow-sm hover:shadow-lg transition duration-300 border ${cardBorder} flex flex-col h-full relative group">
+                
+                <button onclick="deleteEntry('${id}')" class="absolute top-3 right-3 text-gray-300 hover:text-red-500 transition p-1 z-10">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+
+                <div class="p-5 border-b border-gray-100">
+                    <div class="flex justify-between items-start pr-6">
+                        <div>
+                            <h3 class="font-bold text-gray-800 text-lg leading-tight mb-1">${data.fullName}</h3>
+                            <p class="text-xs text-gray-500 font-semibold uppercase tracking-wide">${data.affiliation}</p>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex items-center justify-between">
+                        ${statusBadge}
+                        ${fileButton}
+                    </div>
+                </div>
+
+                <div class="p-5 flex-grow space-y-4">
+                    <div class="grid grid-cols-1 gap-2 text-sm text-gray-600">
+                        <div class="flex items-center gap-2 truncate">
+                            <i class="fas fa-envelope text-blue-400 w-5"></i>
+                            <span class="select-all" title="${data.email}">${data.email}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-phone text-blue-400 w-5"></i>
+                            <span class="select-all">${data.phone}</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 rounded-lg p-3 border border-slate-100">
+                         <div class="mb-2">
+                            <span class="text-[10px] font-bold text-gray-400 uppercase">Title</span>
+                            <p class="text-xs font-bold text-gray-800 leading-snug">${data.paperTitle}</p>
+                        </div>
+                        <div class="relative">
+                            <span class="text-[10px] font-bold text-gray-400 uppercase">Abstract</span>
+                            <div id="abs-${id}" class="text-xs text-gray-600 h-20 overflow-y-auto custom-scrollbar mt-1">
+                                ${data.abstractText}
+                            </div>
+                            <button onclick="copyText('abs-${id}')" class="absolute bottom-0 right-0 bg-white shadow-sm border border-gray-200 p-1 rounded text-[10px] text-gray-500 hover:text-primary">
+                                <i class="far fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-gray-50 border-t border-gray-100 rounded-b-xl space-y-3">
+                    <div class="flex gap-2">
+                        <button onclick="updateStatus('${id}', 'accepted')" class="flex-1 bg-white border border-gray-300 hover:border-green-500 hover:text-green-600 text-gray-600 py-1.5 rounded text-xs font-bold transition">
+                            <i class="fas fa-check"></i> Accept
+                        </button>
+                        <button onclick="updateStatus('${id}', 'rejected')" class="flex-1 bg-white border border-gray-300 hover:border-red-500 hover:text-red-600 text-gray-600 py-1.5 rounded text-xs font-bold transition">
+                            <i class="fas fa-times"></i> Reject
+                        </button>
+                    </div>
+                    
+                    ${mailButton}
+                </div>
+            </div>
+            `;
+        }
+
+        // 5. Global Functions
+        window.openPreview = function(url) {
+            const modal = document.getElementById('previewModal');
+            const iframe = document.getElementById('docFrame');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const loader = document.getElementById('previewLoader');
+
+            // Set download link
+            downloadBtn.href = url;
+
+            // Show modal
+            modal.classList.remove('hidden');
+            loader.classList.remove('hidden'); // Show loader
+
+            // Use Google Docs Viewer for Word/PDF/PPT compatibility
+            // This works even if the file is in Firebase Storage
+            const encodedUrl = encodeURIComponent(url);
+            iframe.src = `https://docs.google.com/gview?url=${encodedUrl}&embedded=true`;
+
+            iframe.onload = function() {
+                loader.classList.add('hidden'); // Hide loader when done
+            };
+        }
+
+        window.closePreview = function() {
+            const modal = document.getElementById('previewModal');
+            const iframe = document.getElementById('docFrame');
+            
+            modal.classList.add('hidden');
+            iframe.src = ""; // Clear src to stop memory usage
+        }
+
+        window.updateStatus = function(id, status) {
+            update(ref(db, 'registrations/' + id), { status: status })
+                .then(() => {
+                    showToast(`Status updated to ${status}`, status === 'accepted' ? "success" : "info");
+                    fetchData(); 
+                })
+                .catch((err) => showToast("Error updating status", "error"));
+        }
+
+        window.deleteEntry = function(id) {
+            if(confirm("Are you sure you want to PERMANENTLY delete this submission? This cannot be undone.")) {
+                remove(ref(db, 'registrations/' + id))
+                    .then(() => {
+                        showToast("Entry deleted successfully", "error");
+                        fetchData();
+                    })
+                    .catch((err) => showToast("Error deleting entry", "error"));
+            }
+        }
+
+        window.copyAllEmails = function() {
+            if(acceptedEmailsList.length === 0) {
+                showToast("No accepted participants found", "warning");
+                return;
+            }
+            const emailString = acceptedEmailsList.join(', ');
+            navigator.clipboard.writeText(emailString).then(() => {
+                showToast(`Copied ${acceptedEmailsList.length} emails to clipboard!`, "success");
+            });
+        }
+
+        window.copyText = function(elementId) {
+            const text = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast("Text copied!", "info");
+            });
+        }
+
+        function showToast(msg, type) {
+            let bg = "#3b82f6"; // blue
+            if(type === "success") bg = "#10b981"; // green
+            if(type === "error") bg = "#ef4444"; // red
+            if(type === "warning") bg = "#f59e0b"; // orange
+
+            Toastify({
+                text: msg,
+                duration: 3000,
+                gravity: "bottom", 
+                position: "right", 
+                style: { background: bg, borderRadius: "8px", fontSize: "14px" }
+            }).showToast();
+        }
+
+    </script>
+</body>
+</html>
