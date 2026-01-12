@@ -119,6 +119,11 @@
                         class="nav-link hover:text-secondary px-3 py-2 rounded transition duration-300 relative"
                         data-page="main" data-section="contact">Contact</button>
 
+                    <!-- Registration Link -->
+                    <button onclick="switchPage('registration')"
+                        class="nav-link hover:text-secondary px-3 py-2 rounded transition duration-300 relative"
+                        data-page="registration">Registration</button>
+
                     <button onclick="switchPage('abstract')"
                         class="ml-4 bg-highlight text-blue-900 px-4 py-2 rounded-full font-bold shadow-lg hover:bg-yellow-300 transition duration-300 relative group flex items-center gap-2"
                         data-page="abstract">
@@ -144,6 +149,10 @@
             <button onclick="switchPage('abstract'); toggleMobileMenu()"
                 class="block w-full text-left px-4 py-3 bg-yellow-500 text-blue-900 font-bold border-b border-white/5 flex items-center gap-2">
                 <i class="fas fa-bullhorn"></i> Call for Papers / Abstract
+            </button>
+            <button onclick="switchPage('registration'); toggleMobileMenu()"
+                class="block w-full text-left px-4 py-3 hover:bg-primary border-b border-white/5 font-semibold text-green-400">
+                <i class="fas fa-user-plus mr-2"></i> Registration
             </button>
             <button onclick="switchPage('main', 'about'); toggleMobileMenu()"
                 class="block w-full text-left px-4 py-3 hover:bg-primary border-b border-white/5">About</button>
@@ -177,10 +186,11 @@
                         class="bg-highlight text-blue-900 hover:bg-yellow-300 px-6 md:px-8 py-3  font-bold transition duration-300 text-base md:text-lg shadow-lg flex items-center gap-2">
                         <i class="fas fa-paper-plane"></i>Call for Papers
                     </button>
-                    <div
-                        class="bg-green-600 text-white px-6 md:px-8 py-3  font-bold text-base md:text-lg shadow-lg flex items-center gap-2 cursor-default">
-                        <i class="fas fa-check-circle"></i> No Registration Fees
-                    </div>
+                    <!-- Changed from static badge to button -->
+                    <button onclick="switchPage('registration')"
+                        class="bg-green-600 hover:bg-green-500 text-white px-6 md:px-8 py-3 font-bold transition duration-300 text-base md:text-lg shadow-lg flex items-center gap-2">
+                        <i class="fas fa-user-plus"></i> Register Now
+                    </button>
                 </div>
             </div>
         </section>
@@ -665,20 +675,145 @@
 
                             </div>
                         </div>
-                </div>
 
-                <div class="pt-4">
-                    <button type="submit" id="submitBtn"
-                        class="w-full bg-primary text-white font-bold py-3 md:py-4 rounded-lg hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2 text-base md:text-lg">
-                        <i class="fas fa-paper-plane"></i>
-                        <span id="btnText">Submit Abstract</span>
-                    </button>
-                </div>
-                </form>
+                        <div class="pt-4">
+                            <button type="submit" id="submitBtn"
+                                class="w-full bg-primary text-white font-bold py-3 md:py-4 rounded-lg hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2 text-base md:text-lg">
+                                <i class="fas fa-paper-plane"></i>
+                                <span id="btnText">Submit Abstract</span>
+                            </button>
+                        </div>
+                    </form>
 
+                </div>
             </div>
+        </section>
     </div>
-    </section>
+
+    <!-- NEW REGISTRATION PAGE SECTION -->
+    <div id="registration-page" class="page-content hidden-page flex-grow">
+        <header class="bg-primary text-white py-4 shadow-md sticky top-0 z-50">
+            <div class="container mx-auto px-4 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-user-plus text-secondary text-2xl"></i>
+                    <span class="font-bold text-lg">Conference Registration</span>
+                </div>
+                <button onclick="switchPage('main')"
+                    class="text-sm bg-secondary text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-600 transition flex items-center gap-2">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </button>
+            </div>
+        </header>
+
+        <section class="py-12 px-4 bg-slate-100 border-b border-slate-200">
+            <div class="container mx-auto max-w-4xl">
+                <div class="bg-green-50 p-6 rounded-xl shadow-md border-l-4 border-green-500 mb-8">
+                    <div class="flex items-start gap-4">
+                        <i class="fas fa-gift text-green-600 text-3xl"></i>
+                        <div>
+                            <h3 class="text-xl font-bold text-green-800 mb-2">Early Bird Registration Offer!</h3>
+                            <p class="text-green-900 font-medium">
+                                Note: For the first 100 participants, there is <span class="underline decoration-2">NO
+                                    Registration Fee</span>.
+                            </p>
+                            <p class="text-sm text-green-700 mt-1">Register quickly to avail this offer. Standard fees
+                                will apply after the first 100 registrations.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-12 bg-surface">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-200">
+                    
+                    <h3 class="text-2xl font-bold text-primary mb-6 text-center">Registration Fee Details</h3>
+                    
+                    <!-- Fee Table -->
+                    <div class="overflow-x-auto mb-8">
+                        <table class="w-full text-sm text-left text-gray-700 border-collapse border border-slate-200">
+                            <thead class="text-xs text-white uppercase bg-primary">
+                                <tr>
+                                    <th scope="col" class="px-6 py-4 border border-slate-300 rounded-tl-lg">
+                                        Category
+                                    </th>
+                                    <th scope="col" class="px-6 py-4 border border-slate-300">
+                                        Indian Delegates (INR)
+                                    </th>
+                                    <th scope="col" class="px-6 py-4 border border-slate-300 rounded-tr-lg">
+                                        Foreign Delegates (USD)
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white border-b hover:bg-slate-50">
+                                    <td class="px-6 py-4 font-medium text-gray-900 border border-slate-200">
+                                        UG / PG / PhD Students
+                                    </td>
+                                    <td class="px-6 py-4 border border-slate-200">
+                                        ₹ 600
+                                    </td>
+                                    <td class="px-6 py-4 border border-slate-200">
+                                        $ 76
+                                    </td>
+                                </tr>
+                                <tr class="bg-slate-50 border-b hover:bg-slate-100">
+                                    <td class="px-6 py-4 font-medium text-gray-900 border border-slate-200">
+                                        Faculty / Post-Doc
+                                    </td>
+                                    <td class="px-6 py-4 border border-slate-200">
+                                        ₹ 1,000
+                                    </td>
+                                    <td class="px-6 py-4 border border-slate-200">
+                                        $ 150
+                                    </td>
+                                </tr>
+                                <tr class="bg-white border-b hover:bg-slate-50">
+                                    <td class="px-6 py-4 font-medium text-gray-900 border border-slate-200">
+                                        Industry Professionals
+                                    </td>
+                                    <td class="px-6 py-4 border border-slate-200">
+                                        ₹ 2,000
+                                    </td>
+                                    <td class="px-6 py-4 border border-slate-200">
+                                        $ 200
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Bank Details Section -->
+                    <div class="bg-slate-50 p-6 rounded-lg border border-slate-200 mb-8 flex flex-col items-center">
+                        <h4 class="text-lg font-bold text-primary mb-3 w-full text-left"><i class="fas fa-university mr-2"></i>Bank Account Details</h4>
+                        <p class="text-sm text-gray-600 mb-4 w-full text-left">Please scan or refer to the details below for fee deposition:</p>
+                        
+                        <!-- Displaying the attached bank details image -->
+                        <div class="w-full max-w-md overflow-hidden rounded-lg shadow-md border border-slate-300">
+                             <img src="Screenshot 2026-01-12 at 1.18.19 PM.jpg" alt="Bank Account Details" class="w-full h-auto object-contain">
+                        </div>
+                    </div>
+
+                    <!-- How to Register / Email Instructions -->
+                    <div class="text-center">
+                        <h3 class="text-xl font-bold text-primary mb-4">How to Register?</h3>
+                        <p class="text-gray-700 mb-6">
+                            To confirm your registration, please send an email with your <strong>Name, Designation, Affiliation</strong>, and <strong>Payment Proof/Transaction ID</strong> (if applicable) to:
+                        </p>
+                        
+                        <a href="mailto:Icemtsd2026@gmail.com" class="inline-flex items-center gap-2 bg-secondary text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-700 transition shadow-lg animate-pulse">
+                            <i class="fas fa-envelope"></i> Icemtsd2026@gmail.com
+                        </a>
+
+                        <p class="text-sm text-gray-500 mt-6">
+                            For any queries, feel free to contact us at the above email or phone numbers provided in the contact section.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
     </div>
 
     <div id="travel-page" class="page-content hidden-page flex-grow">
@@ -953,6 +1088,8 @@
                     <h4 class="text-white font-bold text-lg mb-4">Quick Links</h4>
                     <ul class="space-y-2 text-sm">
                         <li><button onclick="switchPage('main', 'home')" class="hover:text-secondary">Home</button></li>
+                        <li><button onclick="switchPage('registration')"
+                                class="hover:text-secondary font-bold text-green-400">Registration</button></li>
                         <li><button onclick="switchPage('abstract')"
                                 class="hover:text-secondary font-bold text-yellow-500">Call for Papers</button></li>
                         <li><button onclick="switchPage('main', 'topics')" class="hover:text-secondary">Topics of
@@ -971,8 +1108,8 @@
     <script>
         // Page Switching Logic
         function switchPage(pageId, sectionId = null) {
-            // REMOVED 'registration-page' from the list
-            const pages = ['main-page', 'abstract-page', 'travel-page'];
+            // Added 'registration-page' to the list
+            const pages = ['main-page', 'abstract-page', 'travel-page', 'registration-page'];
             const targetPage = document.getElementById(pageId + '-page');
 
             if (!targetPage) return; // Guard clause
@@ -1102,7 +1239,7 @@
             reader.onerror = error => reject(error);
         });
 
-        // 5. Handle Form Submission
+        // 5. Handle Abstract Form Submission
         document.getElementById('submissionForm').addEventListener('submit', async function (e) {
             e.preventDefault(); // Prevent page reload
 
@@ -1174,7 +1311,7 @@
                 }
 
                 // 7. Save Data to Firebase Realtime Database
-                // Create a reference to 'registrations' node
+                // Create a reference to 'registrations' node (FOR ABSTRACTS)
                 const newRegRef = push(ref(db, 'registrations'));
 
                 await set(newRegRef, {
@@ -1207,6 +1344,52 @@
                 btn.classList.remove('opacity-75', 'cursor-not-allowed');
             }
         });
+
+        // 6. Handle REGISTRATION Form Submission (NEW)
+        document.getElementById('registrationForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const btn = document.getElementById('regSubmitBtn');
+            const btnText = document.getElementById('regBtnText');
+            const originalText = btnText.innerText;
+
+            btn.disabled = true;
+            btnText.innerText = "Processing...";
+            btn.classList.add('opacity-75', 'cursor-not-allowed');
+
+            try {
+                const name = document.getElementById('regName').value;
+                const designation = document.getElementById('regDesignation').value;
+                const affiliation = document.getElementById('regAffiliation').value;
+                const email = document.getElementById('regEmail').value;
+                const phone = document.getElementById('regPhone').value;
+
+                // Save to 'conference_registrations' node
+                const newRegRef = push(ref(db, 'conference_registrations'));
+
+                await set(newRegRef, {
+                    fullName: name,
+                    designation: designation,
+                    affiliation: affiliation,
+                    email: email,
+                    phone: phone,
+                    submittedAt: new Date().toISOString()
+                });
+
+                alert("Registration successful! Thank you for registering.");
+                document.getElementById('registrationForm').reset();
+                switchPage('main');
+
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Registration failed. Please try again.\nError: " + error.message);
+            } finally {
+                btn.disabled = false;
+                btnText.innerText = originalText;
+                btn.classList.remove('opacity-75', 'cursor-not-allowed');
+            }
+        });
+
     </script>
     <script>
         /* ---------- DYNAMIC AUTHOR FIELDS LOGIC (NEW) ---------- */
