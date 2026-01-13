@@ -7,16 +7,23 @@
     <title>EMTSD-2026 | International Conference on Emerging Materials</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Firebase Scripts -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+        import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    </script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#1e3a8a', // Deep Navy Blue
-                        secondary: '#3b82f6', // Bright Royal Blue
-                        accent: '#172554', // Dark Midnight Blue
-                        surface: '#eff6ff', // Very Light Blue/White
-                        highlight: '#fbbf24', // Amber/Yellow for highlight
+                        // Updated to "Golden Brown" Poster Theme
+                        primary: '#78350f', // Amber 900 - Deep Golden Brown (Main Brand)
+                        secondary: '#d97706', // Amber 600 - Vibrant Gold (Actions)
+                        accent: '#451a03', // Amber 950 - Darkest Brown (Footer/Nav)
+                        surface: '#fffbeb', // Amber 50 - Warm Beige (Backgrounds)
+                        highlight: '#f59e0b', // Amber 500 - Bright Gold (Contrast/Buttons)
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
@@ -31,8 +38,8 @@
         }
 
         .hero-bg {
-            /* Blue Gradient Overlay */
-            background-image: linear-gradient(rgba(30, 58, 138, 0.9), rgba(23, 37, 84, 0.85)), url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGYw1rWJqyjVLzGctWiub4rYpb3rHnj4uMGQ&s');
+            /* Updated Gradient to match Golden Brown Theme */
+            background-image: linear-gradient(rgba(69, 26, 3, 0.9), rgba(120, 53, 15, 0.85)), url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGYw1rWJqyjVLzGctWiub4rYpb3rHnj4uMGQ&s');
             background-size: cover;
             background-position: center;
         }
@@ -43,12 +50,12 @@
         }
 
         .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f5f9;
+            background: #fdf2f8; /* Light warm track */
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #1e3a8a;
-            /* Primary Blue */
+            background: #78350f;
+            /* Updated to Primary Brown */
         }
 
         /* Page Transition Utility */
@@ -74,22 +81,22 @@
             }
         }
 
-        /* Active Nav Link Style - Color Only */
+        /* Active Nav Link Style */
         .nav-active {
-            color: #3b82f6 !important;
-            /* Secondary Blue */
+            color: #fcd34d !important; /* Amber-300 for better visibility on dark brown */
+            font-weight: bold;
         }
     </style>
 </head>
 
-<body class="bg-slate-50 text-gray-800 flex flex-col min-h-screen font-serif">
+<body class="bg-stone-50 text-gray-800 flex flex-col min-h-screen font-serif">
 
-    <nav class="bg-primary text-white sticky top-0 z-50 shadow-lg border-b border-blue-900">
+    <nav class="bg-primary text-white sticky top-0 z-50 shadow-lg border-b border-amber-900">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center h-14 md:h-16">
                 <div class="flex items-center space-x-3">
                     <div
-                        class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center shadow-md flex-shrink-0 overflow-hidden border border-slate-200">
+                        class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center shadow-md flex-shrink-0 overflow-hidden border border-amber-200">
                         <img src="https://raw.githubusercontent.com/jsdingra11/jsdingra11.github.io/refs/heads/main/temp/PHOTO-2026-01-07-19-28-22-removebg-preview.png"
                             alt="IC-EMTSD Logo" class="w-full h-full object-contain p-1">
                     </div>
@@ -101,31 +108,31 @@
 
                 <div class="hidden lg:flex items-center space-x-1 text-sm font-semibold" id="desktop-nav">
                     <button onclick="switchPage('main', 'home')"
-                        class="nav-link hover:text-secondary px-3 py-2 rounded transition duration-300 relative"
+                        class="nav-link hover:text-amber-300 px-3 py-2 rounded transition duration-300 relative"
                         data-page="main" data-section="home">Home</button>
                     <button onclick="switchPage('main', 'about')"
-                        class="nav-link hover:text-secondary px-3 py-2 rounded transition duration-300 relative"
+                        class="nav-link hover:text-amber-300 px-3 py-2 rounded transition duration-300 relative"
                         data-page="main" data-section="about">About</button>
                     <button onclick="switchPage('main', 'topics')"
-                        class="nav-link hover:text-secondary px-3 py-2 rounded transition duration-300 relative"
+                        class="nav-link hover:text-amber-300 px-3 py-2 rounded transition duration-300 relative"
                         data-page="main" data-section="topics">Topics</button>
                     <button onclick="switchPage('main', 'committee')"
-                        class="nav-link hover:text-secondary px-3 py-2 rounded transition duration-300 relative"
+                        class="nav-link hover:text-amber-300 px-3 py-2 rounded transition duration-300 relative"
                         data-page="main" data-section="committee">Committee</button>
                     <button onclick="switchPage('travel')"
-                        class="nav-link hover:text-secondary px-3 py-2 rounded transition duration-300 relative"
+                        class="nav-link hover:text-amber-300 px-3 py-2 rounded transition duration-300 relative"
                         data-page="travel">Travel</button>
                     <button onclick="switchPage('main', 'contact')"
-                        class="nav-link hover:text-secondary px-3 py-2 rounded transition duration-300 relative"
+                        class="nav-link hover:text-amber-300 px-3 py-2 rounded transition duration-300 relative"
                         data-page="main" data-section="contact">Contact</button>
 
                     <!-- Registration Link -->
                     <button onclick="switchPage('registration')"
-                        class="nav-link hover:text-secondary px-3 py-2 rounded transition duration-300 relative"
+                        class="nav-link hover:text-amber-300 px-3 py-2 rounded transition duration-300 relative"
                         data-page="registration">Registration</button>
 
                     <button onclick="switchPage('abstract')"
-                        class="ml-4 bg-highlight text-blue-900 px-4 py-2 rounded-full font-bold shadow-lg hover:bg-yellow-300 transition duration-300 relative group flex items-center gap-2"
+                        class="ml-4 bg-highlight text-amber-950 px-4 py-2 rounded-full font-bold shadow-lg hover:bg-amber-300 transition duration-300 relative group flex items-center gap-2"
                         data-page="abstract">
                         <i class="fas fa-bullhorn"></i> Call for Abstract
                         <span class="absolute -top-1 -right-1 flex h-3 w-3">
@@ -143,15 +150,15 @@
             </div>
         </div>
         <div id="mobile-menu"
-            class="hidden lg:hidden bg-accent pb-4 border-t border-slate-700 absolute w-full left-0 top-14 shadow-xl z-50">
+            class="hidden lg:hidden bg-accent pb-4 border-t border-amber-900 absolute w-full left-0 top-14 shadow-xl z-50">
             <button onclick="switchPage('main', 'home'); toggleMobileMenu()"
                 class="block w-full text-left px-4 py-3 hover:bg-primary border-b border-white/5">Home</button>
             <button onclick="switchPage('abstract'); toggleMobileMenu()"
-                class="block w-full text-left px-4 py-3 bg-yellow-500 text-blue-900 font-bold border-b border-white/5 flex items-center gap-2">
+                class="block w-full text-left px-4 py-3 bg-amber-500 text-amber-950 font-bold border-b border-white/5 flex items-center gap-2">
                 <i class="fas fa-bullhorn"></i> Call for Abstract / Abstract
             </button>
             <button onclick="switchPage('registration'); toggleMobileMenu()"
-                class="block w-full text-left px-4 py-3 hover:bg-primary border-b border-white/5 font-semibold text-green-400">
+                class="block w-full text-left px-4 py-3 hover:bg-primary border-b border-white/5 font-semibold text-amber-300">
                 <i class="fas fa-user-plus mr-2"></i> Registration
             </button>
             <button onclick="switchPage('main', 'about'); toggleMobileMenu()"
@@ -177,25 +184,25 @@
                 <h1 class="text-3xl sm:text-4xl md:text-6xl font-bold mb-4 md:mb-6 leading-tight drop-shadow-md">
                     International Conference on Emerging Materials and Technologies for Sustainable Development
                 </h1>
-                <p class="text-lg md:text-2xl mb-6 md:mb-8 text-blue-50">
+                <p class="text-lg md:text-2xl mb-6 md:mb-8 text-amber-50">
                     Organized by Department of Physics, Guru Nanak Dev University, Amritsar
                     <br><span class="text-sm italic opacity-80">(Under RUSA 2.0)</span>
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
                     <button onclick="switchPage('abstract')"
-                        class="bg-highlight text-blue-900 hover:bg-yellow-300 px-6 md:px-8 py-3  font-bold transition duration-300 text-base md:text-lg shadow-lg flex items-center gap-2">
+                        class="bg-highlight text-amber-950 hover:bg-amber-300 px-6 md:px-8 py-3 font-bold transition duration-300 text-base md:text-lg shadow-lg flex items-center gap-2">
                         <i class="fas fa-paper-plane"></i>Call for Abstract
                     </button>
                     <!-- Changed from static badge to button -->
                     <button onclick="switchPage('registration')"
-                        class="bg-green-600 hover:bg-green-500 text-white px-6 md:px-8 py-3 font-bold transition duration-300 text-base md:text-lg shadow-lg flex items-center gap-2">
+                        class="bg-white text-primary hover:bg-stone-100 px-6 md:px-8 py-3 font-bold transition duration-300 text-base md:text-lg shadow-lg flex items-center gap-2">
                         <i class="fas fa-user-plus"></i> Register Now
                     </button>
                 </div>
             </div>
         </section>
 
-        <section class="bg-white py-8 border-b border-slate-200">
+        <section class="bg-white py-8 border-b border-stone-200">
             <div class="container mx-auto px-4 text-center">
                 <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">Organized By & Supported Under
                 </p>
@@ -216,7 +223,7 @@
             </div>
         </section>
 
-        <div class="bg-slate-100 border-b border-slate-200 py-4 shadow-inner">
+        <div class="bg-surface border-b border-amber-100 py-4 shadow-inner">
             <div class="container mx-auto px-4">
                 <div class="flex flex-col md:flex-row justify-center gap-3 md:gap-12 text-sm md:text-base items-center">
                     <div class="flex items-center gap-2">
@@ -239,7 +246,7 @@
             </div>
         </div>
 
-        <section id="about" class="py-12 md:py-20 bg-surface">
+        <section id="about" class="py-12 md:py-20 bg-white">
             <div class="container mx-auto px-4">
                 <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-start">
                     <div>
@@ -280,7 +287,7 @@
                             in physics education and research.
                         </p>
                     </div>
-                    <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-slate-100">
+                    <div class="bg-surface p-6 md:p-8 rounded-2xl shadow-lg border border-amber-100">
                         <img src="https://images.shiksha.com/mediadata/images/articles/1620198146php1eyiUF.jpeg"
                             alt="GNDU Campus" class="w-full h-48 object-cover rounded-xl mb-6 shadow-sm">
                         <h3 class="text-xl md:text-2xl font-bold text-primary mb-4">About GNDU</h3>
@@ -301,7 +308,7 @@
             </div>
         </section>
 
-        <section id="topics" class="py-12 md:py-20 bg-slate-100">
+        <section id="topics" class="py-12 md:py-20 bg-amber-50">
             <div class="container mx-auto px-4">
                 <div class="text-center mb-8 md:mb-12">
                     <h2 class="text-2xl md:text-3xl font-bold text-primary mb-4">Topics of Interest</h2>
@@ -310,7 +317,7 @@
                         sustainable energy and materials science.</p>
                 </div>
 
-                <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-6 md:p-12">
+                <div class="bg-white rounded-2xl shadow-md border border-amber-100 p-6 md:p-12">
                     <div
                         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4 md:gap-y-6 text-sm md:text-base">
                         <div class="flex items-start gap-3">
@@ -398,7 +405,7 @@
             </div>
         </section>
 
-        <section id="committee" class="py-12 md:py-20 bg-slate-100">
+        <section id="committee" class="py-12 md:py-20 bg-white">
             <div class="container mx-auto px-4">
                 <div class="text-center mb-10 md:mb-16">
                     <h2 class="text-2xl md:text-3xl font-bold text-primary mb-4">Organizing Committee</h2>
@@ -408,23 +415,23 @@
                 <div class="mb-10 md:mb-16">
                     <div class="flex flex-col md:flex-row justify-center gap-8 md:gap-12 text-center">
                         <div
-                            class="w-full md:w-1/3 max-w-sm p-6 bg-white rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition">
-                            <h3 class="text-xl md:text-2xl font-bold text-center mb-6 md:mb-8 text-gray-700">Chief
+                            class="w-full md:w-1/3 max-w-sm p-6 bg-surface rounded-xl shadow-sm border border-amber-100 hover:shadow-md transition">
+                            <h3 class="text-xl md:text-2xl font-bold text-center mb-6 md:mb-8 text-amber-900">Chief
                                 Patron</h3>
-                            <div class="w-20 h-20 md:w-28 md:h-28  mx-auto mb-4 overflow-hidden bg-slate-100">
+                            <div class="w-20 h-20 md:w-28 md:h-28  mx-auto mb-4 overflow-hidden bg-white rounded-full border border-amber-200">
                                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxEQXFuBuRF6Ukz7EQdrRf3XH56Q7MannTpg&s"
-                                    alt=“vc” class="w-full h-full object-contain p-2">
+                                    alt="vc" class="w-full h-full object-contain p-2">
                             </div>
                             <h4 class="font-bold text-lg md:text-xl text-primary leading-tight">Prof. (Dr.) Karamjeet
                                 Singh</h4>
                             <p class="text-sm text-gray-500 mt-2 font-semibold">Vice Chancellor, GNDU</p>
                         </div>
                         <div
-                            class="w-full md:w-1/3 max-w-sm p-6 bg-white rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition">
-                            <h3 class="text-xl md:text-2xl font-bold text-center mb-6 md:mb-8 text-gray-700">Covenor
+                            class="w-full md:w-1/3 max-w-sm p-6 bg-surface rounded-xl shadow-sm border border-amber-100 hover:shadow-md transition">
+                            <h3 class="text-xl md:text-2xl font-bold text-center mb-6 md:mb-8 text-amber-900">Convenor
                             </h3>
-                            <div class="w-20 h-20 md:w-28 md:h-28 mx-auto mb-4 overflow-hidden bg-slate-100">
-                                <img src="aman-mahajan.png" alt=“amansir” class="w-full h-full object-contain p-2">
+                            <div class="w-20 h-20 md:w-28 md:h-28 mx-auto mb-4 overflow-hidden bg-white rounded-full border border-amber-200">
+                                <img src="aman-mahajan.png" alt="amansir" class="w-full h-full object-contain p-2">
                             </div>
 
                             <h4 class="font-bold text-lg md:text-xl text-primary leading-tight">Prof. (Dr.) Aman Mahajan
@@ -435,88 +442,73 @@
                 </div>
 
                 <div class="grid md:grid-cols-2 gap-8 md:gap-12">
-                    <div class="bg-white p-6 md:p-8 rounded-xl shadow-md border-l-4 border-primary">
+                    <div class="bg-surface p-6 md:p-8 rounded-xl shadow-md border-l-4 border-primary">
                         <h3 class="text-lg md:text-xl font-bold mb-6 flex items-center gap-2 text-primary">
                             <i class="fas fa-users text-secondary"></i> Organizing Team
                         </h3>
                         <ul class="space-y-3 text-sm text-gray-700 h-80 overflow-y-auto pr-2 custom-scrollbar">
-                            <li class="pb-2 border-b border-slate-100">Dr. Atul Khanna</li>
-                            <li class="pb-2 border-b border-slate-100">Dr. K. J Singh</li>
-                            <li class="pb-2 border-b border-slate-100">Dr. Anupinder Singh</li>
-                            <li class="pb-2 border-b border-slate-100">Dr. Sukhdeep Kaur</li>
-                            <li class="pb-2 border-b border-slate-100">Dr. Bindiya Arora</li>
-                            <li class="pb-2 border-b border-slate-100">Dr. Paramjit Kaur</li>
-                            <li class="pb-2 border-b border-slate-100">Dr. Harjeet Kaur</li>
-                            <li class="pb-2 border-b border-slate-100">Dr. Mandeep Singh</li>
-                            <li class="pb-2 border-b border-slate-100">Dr. Neeraj Bansal</li>
-                            <li class="pb-2 border-b border-slate-100">Dr. Harpreet Singh</li>
-                            <li class="pb-2 border-b border-slate-100">Dr. Karamveer Kaur</li>
-                            <li class="pb-2 border-b border-slate-100">Dr. N. P. S. Saini</li>
+                            <li class="pb-2 border-b border-amber-100">Dr. Atul Khanna</li>
+                            <li class="pb-2 border-b border-amber-100">Dr. K. J Singh</li>
+                            <li class="pb-2 border-b border-amber-100">Dr. Anupinder Singh</li>
+                            <li class="pb-2 border-b border-amber-100">Dr. Sukhdeep Kaur</li>
+                            <li class="pb-2 border-b border-amber-100">Dr. Bindiya Arora</li>
+                            <li class="pb-2 border-b border-amber-100">Dr. Paramjit Kaur</li>
+                            <li class="pb-2 border-b border-amber-100">Dr. Harjeet Kaur</li>
+                            <li class="pb-2 border-b border-amber-100">Dr. Mandeep Singh</li>
+                            <li class="pb-2 border-b border-amber-100">Dr. Neeraj Bansal</li>
+                            <li class="pb-2 border-b border-amber-100">Dr. Harpreet Singh</li>
+                            <li class="pb-2 border-b border-amber-100">Dr. Karamveer Kaur</li>
+                            <li class="pb-2 border-b border-amber-100">Dr. N. P. S. Saini</li>
                         </ul>
                     </div>
 
-                    <div class="bg-white p-6 md:p-8 rounded-xl shadow-md border-l-4 border-secondary">
+                    <div class="bg-surface p-6 md:p-8 rounded-xl shadow-md border-l-4 border-secondary">
                         <h3 class="text-lg md:text-xl font-bold mb-6 flex items-center gap-2 text-primary">
                             <i class="fas fa-globe-asia text-secondary"></i> Advisory Committee
                         </h3>
                         <ul class="space-y-3 text-sm text-gray-700 h-80 overflow-y-auto pr-2 custom-scrollbar">
-                            <li class="pb-2 border-b border-slate-100">Prof. D K Aswal, National Disaster Management
+                            <li class="pb-2 border-b border-amber-100">Prof. D K Aswal, National Disaster Management
                                 Authority, Government of India</li>
-                            <li class="pb-2 border-b border-slate-100">Prof. Mohamed M. Chehimi, Université de Paris,
+                            <li class="pb-2 border-b border-amber-100">Prof. Mohamed M. Chehimi, Université de Paris,
                                 France</li>
-                            <li class="pb-2 border-b border-slate-100">Prof. Anindya Dutta, INST Mohali</li>
-                            <li class="pb-2 border-b border-slate-100">Prof. Rajeev Ahuja, Director, IIT Ropar</li>
-                            <li class="pb-2 border-b border-slate-100">Prof. Arvind, IISER Mohali</li>
-                            <li class="pb-2 border-b border-slate-100">Prof. Awadhesh Mani, IGCAR Kalpakkam</li>
-                            <li class="pb-2 border-b border-slate-100">Prof. Ambesh Dixit, IIT Jodhpur</li>
-                            <li class="pb-2 border-b border-slate-100">Prof. B.S. Murty, Director, IIT Hyderabad</li>
-                            <li class="pb-2 border-b border-slate-100">Dr. Davinder Pal Sharma, University of the
+                            <li class="pb-2 border-b border-amber-100">Prof. Anindya Dutta, INST Mohali</li>
+                            <li class="pb-2 border-b border-amber-100">Prof. Rajeev Ahuja, Director, IIT Ropar</li>
+                            <li class="pb-2 border-b border-amber-100">Prof. Arvind, IISER Mohali</li>
+                            <li class="pb-2 border-b border-amber-100">Prof. Awadhesh Mani, IGCAR Kalpakkam</li>
+                            <li class="pb-2 border-b border-amber-100">Prof. Ambesh Dixit, IIT Jodhpur</li>
+                            <li class="pb-2 border-b border-amber-100">Prof. B.S. Murty, Director, IIT Hyderabad</li>
+                            <li class="pb-2 border-b border-amber-100">Dr. Davinder Pal Sharma, University of the
                                 West Indies, West Indies</li>
-                            <li class="pb-2 border-b border-slate-100">Dr. Devarani Devi, IUAC, New Delhi</li>
-                            <li class="pb-2 border-b border-slate-100">Prof. Deshdeep Sehdev, IIT Kanpur</li>
-                            <li class="pb-2 border-b border-slate-100">Dr. Dinesh Pathak, University of West Indies,
+                            <li class="pb-2 border-b border-amber-100">Dr. Devarani Devi, IUAC, New Delhi</li>
+                            <li class="pb-2 border-b border-amber-100">Prof. Deshdeep Sehdev, IIT Kanpur</li>
+                            <li class="pb-2 border-b border-amber-100">Dr. Dinesh Pathak, University of West Indies,
                                 West Indies</li>
-                            <li class="pb-2 border-b border-slate-100">Dr. Fouran Singh, IUAC, New Delhi</li>
-                            <li class="pb-2 border-b border-slate-100">Prof. Kartik Ghosh, Missouri State
+                            <li class="pb-2 border-b border-amber-100">Dr. Fouran Singh, IUAC, New Delhi</li>
+                            <li class="pb-2 border-b border-amber-100">Prof. Kartik Ghosh, Missouri State
                                 University, Springfield, USA</li>
-                            <li class="pb-2 border-b border-slate-100">Prof. Kanishka Biswas, JNCASR Bengaluru</li>
-                            <li class="pb-2 border-b border-slate-100">Prof. Kavita Dorai, IISER Mohali</li>
-                            <li class="pb-2 border-b border-slate-100">Prof. M.A. More, Savitribai Phule Pune
+                            <li class="pb-2 border-b border-amber-100">Prof. Kanishka Biswas, JNCASR Bengaluru</li>
+                            <li class="pb-2 border-b border-amber-100">Prof. Kavita Dorai, IISER Mohali</li>
+                            <li class="pb-2 border-b border-amber-100">Prof. M.A. More, Savitribai Phule Pune
                                 University, Pune</li>
-                            <li class="pb-2 border-b border-slate-100">Dr. Mandeep Singh, University of Brescia,
+                            <li class="pb-2 border-b border-amber-100">Dr. Mandeep Singh, University of Brescia,
                                 Italy</li>
-                            <li class="pb-2 border-b border-slate-100">Prof. Manish K. Kashyap, Jawaharlal Nehru
+                            <li class="pb-2 border-b border-amber-100">Prof. Manish K. Kashyap, Jawaharlal Nehru
                                 University, New Delhi</li>
-                            <li class="pb-2 border-b border-slate-100">Prof. M. Naventham, SRM Institute of Science
+                            <li class="pb-2 border-b border-amber-100">Prof. M. Naventham, SRM Institute of Science
                                 and Technology, Chennai</li>
-                            <li class="pb-2 border-b border-slate-100">Prof. Nandu B. Chaure, Savitribai Phule Pune
+                            <li class="pb-2 border-b border-amber-100">Prof. Nandu B. Chaure, Savitribai Phule Pune
                                 University, Pune</li>
-                            <li class="pb-2 border-b border-slate-100">Dr. Pabitra Nayak, TIFR Mumbai</li>
-                            <li class="pb-2 border-b border-slate-100">Prof. Ramesh Chandra, IIT Roorkee</li>
-                            <li class="pb-2 border-b border-slate-100">Prof. Rajesh V. Nair, IIT Ropar, Rupnagar
+                            <li class="pb-2 border-b border-amber-100">Dr. Pabitra Nayak, TIFR Mumbai</li>
+                            <li class="pb-2 border-b border-amber-100">Prof. Ramesh Chandra, IIT Roorkee</li>
+                            <li class="pb-2 border-b border-amber-100">Prof. Rajesh V. Nair, IIT Ropar, Rupnagar
                             </li>
-                            <li class="pb-2 border-b border-slate-100">Prof. Vasant Sathe, UGC- DAE Indore</li>
-                            <li class="pb-2 border-b border-slate-100">Prof. Sikha Varma, IOP Bhubaneswar</li>
+                            <li class="pb-2 border-b border-amber-100">Prof. Vasant Sathe, UGC- DAE Indore</li>
+                            <li class="pb-2 border-b border-amber-100">Prof. Sikha Varma, IOP Bhubaneswar</li>
                         </ul>
                     </div>
                 </div>
             </div>
         </section>
-<!--
-        <section class="py-12 bg-white border-t border-slate-200">
-            <div class="container mx-auto text-center px-4">
-                <h2 class="text-2xl md:text-3xl font-bold text-primary mb-6">Our Sponsors</h2>
-                <div
-                    class="max-w-2xl mx-auto p-8 md:p-12 bg-slate-50 rounded-xl border-2 border-dashed border-slate-300 flex flex-col items-center justify-center">
-                    <i class="fas fa-handshake text-4xl text-gray-300 mb-4"></i>
-                    <span
-                        class="text-xl md:text-2xl font-bold text-gray-400 uppercase tracking-widest animate-pulse">Coming
-                        Soon</span>
-                    <p class="text-gray-500 text-sm mt-2">Sponsorship details will be updated shortly.</p>
-                </div>
-
-            </div>
-        </section> -->
 
     </div>
 
@@ -528,13 +520,13 @@
                     <span class="font-bold text-lg">Call for Abstract / Abstract</span>
                 </div>
                 <button onclick="switchPage('main')"
-                    class="text-sm bg-secondary text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-600 transition flex items-center gap-2">
+                    class="text-sm bg-secondary text-white px-4 py-2 rounded-lg font-bold hover:bg-amber-600 transition flex items-center gap-2">
                     <i class="fas fa-arrow-left"></i> Back to Home
                 </button>
             </div>
         </header>
 
-        <section class="py-12 px-4 bg-slate-100 border-b border-slate-200">
+        <section class="py-12 px-4 bg-amber-50 border-b border-amber-200">
             <div class="container mx-auto max-w-4xl">
                 <div class="bg-white p-8 rounded-xl shadow-md border-l-4 border-secondary">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
@@ -542,8 +534,8 @@
                             <i class="fas fa-info-circle"></i> Submission Guidelines
                         </h3>
                         <a href="Template_Abstract_EMSTD-2026.docx"
-                            class="bg-blue-50 text-secondary border border-secondary/30 px-4 py-2  text-sm font-bold flex items-center gap-2 hover:bg-blue-100 transition shadow-sm">
-                            <i class="fas fa-file-word text-blue-800"></i> Download Template (.docx)
+                            class="bg-amber-50 text-secondary border border-secondary/30 px-4 py-2  text-sm font-bold flex items-center gap-2 hover:bg-amber-100 transition shadow-sm">
+                            <i class="fas fa-file-word text-amber-800"></i> Download Template (.docx)
                         </a>
                     </div>
                     <ul class="list-disc pl-5 space-y-2 text-gray-700 text-sm md:text-base">
@@ -559,18 +551,18 @@
 
         <section class="py-12 md:py-20 bg-surface">
             <div class="container mx-auto px-4">
-                <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-200">
+                <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-amber-200">
                     <form id="submissionForm" class="space-y-4 md:space-y-6">
                         <div class="grid md:grid-cols-2 gap-4 md:gap-6">
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Full Name
                                     (Presenter)</label>
                                 <input type="text" id="nameInput" name="full_name" required
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition bg-slate-50"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition bg-stone-50"
                                     placeholder="Dr./Prof./Mr./Ms. Name" required>
                             </div>
 
-                            <div class="md:col-span-2 bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <div class="md:col-span-2 bg-stone-50 p-4 rounded-lg border border-stone-200">
                                 <label class="block text-sm font-bold text-primary mb-2">
                                     <i class="fas fa-users"></i> Add Authors (Including Main Author)
                                 </label>
@@ -579,7 +571,7 @@
                                 </div>
 
                                 <button type="button" id="addAuthorBtn"
-                                    class="text-sm bg-green-100 text-green-700 hover:bg-green-200 px-3 py-2 rounded font-semibold transition flex items-center gap-2">
+                                    class="text-sm bg-orange-100 text-orange-700 hover:bg-orange-200 px-3 py-2 rounded font-semibold transition flex items-center gap-2">
                                     <i class="fas fa-plus"></i> Add Author
                                 </button>
                             </div>
@@ -587,14 +579,14 @@
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
                                 <input type="email" id="emailInput" name="email" required
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition bg-slate-50"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition bg-stone-50"
                                     placeholder="your.email@university.edu" required>
                             </div>
 
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Phone Number</label>
                                 <input type="tel" id="phoneInput" name="phone" required pattern="[0-9+\s\-]{8,15}"
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition bg-slate-50"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition bg-stone-50"
                                     placeholder="+91 XXXXXXXXXX" required>
                             </div>
 
@@ -602,7 +594,7 @@
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Affiliation /
                                     Institute</label>
                                 <input type="text" id="affInput" name="affiliation" required
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition bg-slate-50"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition bg-stone-50"
                                     placeholder="Department, University Name (applies to all authors)" required>
                             </div>
                         </div>
@@ -611,14 +603,14 @@
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Paper Title</label>
                                 <input type="text" id="titleInput" name="paper_title" required
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition bg-slate-50"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition bg-stone-50"
                                     placeholder="Title of your research paper" required>
                             </div>
 
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Select Topic</label>
                                 <select id="topicSelect" name="topic" required
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition bg-slate-50">
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition bg-stone-50">
                                     <option value="" disabled selected>Select a topic...</option>
                                     <option>Sustainable and green practices in Energy</option>
                                     <option>Sustainable and Renewable Energy Materials</option>
@@ -646,7 +638,7 @@
                                 </label>
                                 <textarea id="abstractInput" name="abstract" required rows="5" class="w-full px-4 py-3 rounded-lg border border-gray-300 
                focus:border-secondary focus:ring-2 focus:ring-secondary/20 
-               outline-none transition bg-slate-50" placeholder="Paste your abstract here..." required></textarea>
+               outline-none transition bg-stone-50" placeholder="Paste your abstract here..." required></textarea>
 
                                 <p id="wordCounter" class="text-sm text-gray-500 mt-1 text-right">
                                     0 / 300 words
@@ -657,10 +649,10 @@
                             <div>
                                 <label id="fileUploadBox" class="flex flex-col items-center justify-center w-full h-24 md:h-32 
            border-2 border-gray-300 border-dashed rounded-lg cursor-pointer 
-           bg-slate-50 hover:bg-slate-100 transition">
+           bg-stone-50 hover:bg-stone-100 transition">
                                     <div class="flex flex-col items-center justify-center pt-5 pb-6">
                                         <i id="fileIcon"
-                                            class="fas fa-file-word text-2xl md:text-3xl text-blue-600 mb-3"></i>
+                                            class="fas fa-file-word text-2xl md:text-3xl text-amber-600 mb-3"></i>
                                         <p class="text-sm text-gray-500">
                                             <span class="font-semibold text-secondary">Click to upload</span> or drag
                                             and drop
@@ -700,13 +692,13 @@
                     <span class="font-bold text-lg">Conference Registration</span>
                 </div>
                 <button onclick="switchPage('main')"
-                    class="text-sm bg-secondary text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-600 transition flex items-center gap-2">
+                    class="text-sm bg-secondary text-white px-4 py-2 rounded-lg font-bold hover:bg-amber-600 transition flex items-center gap-2">
                     <i class="fas fa-arrow-left"></i> Back to Home
                 </button>
             </div>
         </header>
 
-        <section class="py-12 px-4 bg-slate-100 border-b border-slate-200">
+        <section class="py-12 px-4 bg-amber-50 border-b border-amber-200">
             <div class="container mx-auto max-w-4xl">
                 <!-- <div class="bg-green-50 p-6 rounded-xl shadow-md border-l-4 border-green-500 mb-8">
                     <div class="flex items-start gap-4">
@@ -720,7 +712,7 @@
                     </div>
                 </div> -->
 
-                <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-200">
+                <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-amber-200">
                     <div class="text-center mb-8">
                         <h2 class="text-2xl font-bold text-primary">Register for EMTSD-2026</h2>
                         <p class="text-gray-500 text-sm mt-1">Please fill in your details below.</p>
@@ -729,39 +721,39 @@
     <div>
         <label class="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
         <input type="text" id="regName" required
-            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition bg-slate-50"
+            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition bg-stone-50"
             placeholder="Dr./Mr./Ms. Full Name">
     </div>
 
     <div>
         <label class="block text-sm font-semibold text-gray-700 mb-2">Designation</label>
         <input type="text" id="regDesignation" required
-            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition bg-slate-50"
+            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition bg-stone-50"
             placeholder="e.g. Assistant Professor, PhD Scholar, Student">
     </div>
 
     <div>
         <label class="block text-sm font-semibold text-gray-700 mb-2">Affiliation / Institute</label>
         <input type="text" id="regAffiliation" required
-            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition bg-slate-50"
+            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition bg-stone-50"
             placeholder="e.g. Department of Physics, GNDU Amritsar">
     </div>
 
     <div>
         <label class="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
         <input type="email" id="regEmail" required
-            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition bg-slate-50"
+            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition bg-stone-50"
             placeholder="your.email@example.com">
     </div>
 
     <div>
         <label class="block text-sm font-semibold text-gray-700 mb-2">Phone Number</label>
         <input type="tel" id="regPhone" required pattern="[0-9+\s\-]{8,15}"
-            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition bg-slate-50"
+            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition bg-stone-50"
             placeholder="+91 XXXXXXXXXX">
     </div>
 
-    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+    <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
         <label class="block text-sm font-bold text-primary mb-3">Participating As:</label>
         <div class="flex flex-col sm:flex-row gap-4">
             <label class="flex items-center gap-2 cursor-pointer group">
@@ -779,7 +771,7 @@
 
     <div class="pt-4">
         <button type="submit" id="regSubmitBtn"
-            class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 md:py-4 rounded-lg transition shadow-lg flex items-center justify-center gap-2 text-lg">
+            class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-3 md:py-4 rounded-lg transition shadow-lg flex items-center justify-center gap-2 text-lg">
             <i class="fas fa-check-circle"></i>
             <span id="regBtnText">Confirm Registration</span>
         </button>
@@ -789,96 +781,8 @@
             </div>
         </section>
     </div>
-<!--
-        <section class="py-12 bg-surface">
-            <div class="container mx-auto px-4">
-                <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-200">
-                    
-                    <h3 class="text-2xl font-bold text-primary mb-6 text-center">Registration Fee Details</h3>
-                    
-                    <div class="overflow-x-auto mb-8">
-                        <table class="w-full text-sm text-left text-gray-700 border-collapse border border-slate-200">
-                            <thead class="text-xs text-white uppercase bg-primary">
-                                <tr>
-                                    <th scope="col" class="px-6 py-4 border border-slate-300 rounded-tl-lg">
-                                        Category
-                                    </th>
-                                    <th scope="col" class="px-6 py-4 border border-slate-300">
-                                        Indian Delegates (INR)
-                                    </th>
-                                    <th scope="col" class="px-6 py-4 border border-slate-300 rounded-tr-lg">
-                                        Foreign Delegates (USD)
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="bg-white border-b hover:bg-slate-50">
-                                    <td class="px-6 py-4 font-medium text-gray-900 border border-slate-200">
-                                        UG / PG / PhD Students
-                                    </td>
-                                    <td class="px-6 py-4 border border-slate-200">
-                                        ₹ 600
-                                    </td>
-                                    <td class="px-6 py-4 border border-slate-200">
-                                        $ 76
-                                    </td>
-                                </tr>
-                                <tr class="bg-slate-50 border-b hover:bg-slate-100">
-                                    <td class="px-6 py-4 font-medium text-gray-900 border border-slate-200">
-                                        Faculty / Post-Doc
-                                    </td>
-                                    <td class="px-6 py-4 border border-slate-200">
-                                        ₹ 1,000
-                                    </td>
-                                    <td class="px-6 py-4 border border-slate-200">
-                                        $ 150
-                                    </td>
-                                </tr>
-                                <tr class="bg-white border-b hover:bg-slate-50">
-                                    <td class="px-6 py-4 font-medium text-gray-900 border border-slate-200">
-                                        Industry Professionals
-                                    </td>
-                                    <td class="px-6 py-4 border border-slate-200">
-                                        ₹ 2,000
-                                    </td>
-                                    <td class="px-6 py-4 border border-slate-200">
-                                        $ 200
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
 
-                    <div class="bg-slate-50 p-6 rounded-lg border border-slate-200 mb-8 flex flex-col items-center">
-                        <h4 class="text-lg font-bold text-primary mb-3 w-full text-left"><i class="fas fa-university mr-2"></i>Bank Account Details</h4>
-                        <p class="text-sm text-gray-600 mb-4 w-full text-left">Please scan or refer to the details below for fee deposition:</p>
-                        
-                        <div class="w-full max-w-md overflow-hidden rounded-lg shadow-md border border-slate-300"><h3 style:"text-align:center;">Will be Updated Soon...</h3>
-                        </div>
-                    </div>
-
-                    <div class="text-center">
-                        <h3 class="text-xl font-bold text-primary mb-4">How to Register?</h3>
-                        <p class="text-gray-700 mb-6">
-                            To confirm your registration, please send an email with your <strong>Name, Designation, Affiliation</strong>, and <strong>Payment Proof/Transaction ID</strong> (if applicable) to:
-                        </p>
-                        
-                        <a href="mailto:Icemtsd2026@gmail.com" class="inline-flex items-center gap-2 bg-secondary text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-700 transition shadow-lg animate-pulse">
-                            <i class="fas fa-envelope"></i> Icemtsd2026@gmail.com
-                        </a>
-
-                        <p class="text-sm text-gray-500 mt-6">
-                            For any queries, feel free to contact us at the above email or phone numbers provided in the contact section.
-                        </p>
-                    </div>
-
-                </div>
-            </div>
-        </section> -->
-
-        
-    </div>
-
+    
     <div id="travel-page" class="page-content hidden-page flex-grow">
         <header class="bg-primary text-white py-4 shadow-md sticky top-0 z-50">
             <div class="container mx-auto px-4 flex justify-between items-center">
@@ -887,7 +791,7 @@
                     <span class="font-bold text-lg">Amritsar Travel Guide</span>
                 </div>
                 <button onclick="switchPage('main')"
-                    class="text-sm bg-secondary text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-600 transition flex items-center gap-2">
+                    class="text-sm bg-secondary text-white px-4 py-2 rounded-lg font-bold hover:bg-amber-600 transition flex items-center gap-2">
                     <i class="fas fa-arrow-left"></i> Back to Home
                 </button>
             </div>
@@ -906,7 +810,7 @@
                     <div
                         class="bg-white p-6 rounded-xl shadow-md border-t-4 border-secondary hover:-translate-y-1 transition duration-300">
                         <div
-                            class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-primary mb-4 mx-auto">
+                            class="w-12 h-12 bg-stone-100 rounded-full flex items-center justify-center text-primary mb-4 mx-auto">
                             <i class="fas fa-plane text-2xl"></i>
                         </div>
                         <h3 class="font-bold text-lg text-center mb-2">From Airport</h3>
@@ -929,7 +833,7 @@
                     <div
                         class="bg-white p-6 rounded-xl shadow-md border-t-4 border-primary hover:-translate-y-1 transition duration-300">
                         <div
-                            class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-primary mb-4 mx-auto">
+                            class="w-12 h-12 bg-stone-100 rounded-full flex items-center justify-center text-primary mb-4 mx-auto">
                             <i class="fas fa-train text-2xl"></i>
                         </div>
                         <h3 class="font-bold text-lg text-center mb-2">From Railway Station</h3>
@@ -952,7 +856,7 @@
                     <div
                         class="bg-white p-6 rounded-xl shadow-md border-t-4 border-secondary hover:-translate-y-1 transition duration-300">
                         <div
-                            class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-primary mb-4 mx-auto">
+                            class="w-12 h-12 bg-stone-100 rounded-full flex items-center justify-center text-primary mb-4 mx-auto">
                             <i class="fas fa-bus text-2xl"></i>
                         </div>
                         <h3 class="font-bold text-lg text-center mb-2">From Bus Stand</h3>
@@ -974,7 +878,7 @@
             </div>
         </section>
 
-        <section class="bg-slate-100 py-12 px-4">
+        <section class="bg-amber-50 py-12 px-4">
             <div class="container mx-auto max-w-5xl">
                 <div class="text-center mb-10">
                     <h2 class="text-3xl font-bold text-primary mb-3">Explore Amritsar</h2>
@@ -1116,7 +1020,7 @@
         </section>
     </div>
 
-    <footer id="contact" class="bg-accent text-gray-400 py-12 border-t border-blue-950 mt-auto">
+    <footer id="contact" class="bg-accent text-gray-400 py-12 border-t border-amber-950 mt-auto">
         <div class="container mx-auto px-4">
             <div class="grid md:grid-cols-3 gap-8 text-center md:text-left">
                 <div>
@@ -1152,7 +1056,7 @@
                     <ul class="space-y-2 text-sm">
                         <li><button onclick="switchPage('main', 'home')" class="hover:text-secondary">Home</button></li>
                         <li><button onclick="switchPage('registration')"
-                                class="hover:text-secondary font-bold text-green-400">Registration</button></li>
+                                class="hover:text-secondary font-bold text-amber-300">Registration</button></li>
                         <li><button onclick="switchPage('abstract')"
                                 class="hover:text-secondary font-bold text-yellow-500">Call for Abstract</button></li>
                         <li><button onclick="switchPage('main', 'topics')" class="hover:text-secondary">Topics of
@@ -1162,7 +1066,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="border-t border-blue-900 mt-12 pt-8 text-center text-xs">
+            <div class="border-t border-amber-900 mt-12 pt-8 text-center text-xs">
                 <p>&copy; 2026 EMTSD. All rights reserved. Department of Physics, GNDU.</p>
             </div>
         </div>
@@ -1497,7 +1401,7 @@
                 wordCounter.classList.remove("text-gray-500");
             } else {
                 abstractInput.classList.remove("border-red-500", "bg-red-50");
-                abstractInput.classList.add("border-gray-300", "bg-slate-50");
+                abstractInput.classList.add("border-gray-300", "bg-stone-50");
 
                 wordCounter.classList.remove("text-red-600", "font-semibold");
                 wordCounter.classList.add("text-gray-500");
@@ -1513,10 +1417,10 @@
         fileInput.addEventListener("change", () => {
             if (fileInput.files.length > 0) {
                 fileNameDisplay.textContent = fileInput.files[0].name;
-                fileNameDisplay.classList.add("text-green-600", "font-semibold");
+                fileNameDisplay.classList.add("text-amber-600", "font-semibold");
 
-                fileUploadBox.classList.add("border-green-500", "bg-green-50");
-                fileIcon.classList.replace("text-blue-600", "text-green-600");
+                fileUploadBox.classList.add("border-amber-500", "bg-amber-50");
+                fileIcon.classList.replace("text-amber-600", "text-amber-600");
             }
         });
 
