@@ -443,8 +443,19 @@
                 `;
 
                 const subject = encodeURIComponent("Abstract Acceptance - IC-EMTSD-2026");
-                const idText = data.abstractId ? `(Abstract ID: ${data.abstractId})` : "";
-                const body = encodeURIComponent(`Dear ${data.fullName},\n\nYour abstract "${data.paperTitle}" ${idText} has been accepted.`);
+                // *** UPDATED MAIL FORMAT ***
+                const abstractIdText = data.abstractId || "(ID Pending)";
+                const mailBody = `Dear ${data.fullName},
+
+Thank you for submitting your abstract to EMTSD-2026. We are pleased to inform you that your abstract (${abstractIdText}) entitled “${data.paperTitle}” has been accepted for EMTSD-2026.
+
+Please note that since your abstract has been accepted, you need to register for the conference before February 15, 2026, without paying any registration fee.
+
+With Best Regards
+Organizing committee
+EMTSD-2026`;
+                
+                const body = encodeURIComponent(mailBody);
                 
                 mailButton = `
                 <a href="mailto:${data.email}?subject=${subject}&body=${body}" target="_blank" class="flex-1 bg-green-600 text-white py-2 rounded-lg font-bold text-sm hover:bg-green-700 transition flex items-center justify-center gap-2 shadow-sm">
