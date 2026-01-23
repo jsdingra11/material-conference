@@ -290,27 +290,36 @@
 
                 if (snapshot.exists()) {
                     const data = snapshot.val();
-                    const entries = Object.entries(data);
+                    let entries = Object.entries(data);
+
+                    // --- FILTER ADDED HERE ---
+                    // Remove entries where fullName is missing or literally "undefined"
+                    entries = entries.filter(([key, val]) => val.fullName && val.fullName !== 'undefined');
                     
                     totalCount.innerText = entries.length;
-                    grid.classList.remove('hidden');
                     
-                    entries.reverse().forEach(([key, val]) => {
-                        // Collect emails (logic differs slightly per view)
-                        if(currentView === 'abstracts') {
-                             if(val.status === 'accepted') acceptedEmailsList.push(val.email);
-                        } else {
-                             // For general registration, collect all emails
-                             if(val.email) acceptedEmailsList.push(val.email);
-                        }
+                    if (entries.length > 0) {
+                        grid.classList.remove('hidden');
+                        
+                        entries.reverse().forEach(([key, val]) => {
+                            // Collect emails (logic differs slightly per view)
+                            if(currentView === 'abstracts') {
+                                 if(val.status === 'accepted') acceptedEmailsList.push(val.email);
+                            } else {
+                                 // For general registration, collect all emails
+                                 if(val.email) acceptedEmailsList.push(val.email);
+                            }
 
-                        // Render Card
-                        if(currentView === 'abstracts') {
-                            grid.innerHTML += createAbstractCard(key, val);
-                        } else {
-                            grid.innerHTML += createRegistrationCard(key, val);
-                        }
-                    });
+                            // Render Card
+                            if(currentView === 'abstracts') {
+                                grid.innerHTML += createAbstractCard(key, val);
+                            } else {
+                                grid.innerHTML += createRegistrationCard(key, val);
+                            }
+                        });
+                    } else {
+                        empty.classList.remove('hidden');
+                    }
 
                 } else {
                     empty.classList.remove('hidden');
